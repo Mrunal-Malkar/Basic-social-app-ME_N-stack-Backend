@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit username</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div
+      class="w-full flex flex-col justify-center align-center bg-gray-200 h-screen items-center"
+    >
+      <h2 class="self-center xl:text-6xl m-1 my-3 font-bold text-blue-700">
+        log-in!
+      </h2>
+      <div class="xl:w-96 bg-gray-100 p-1 self-center drop-shadow-2xl filter">
+        <form action="editingusername" method="post" class="flex flex-col align-between p-2 text-2xl backdrop-black-2">
+          <div class="flex flex-col m-2">
+            <label for="name" class="text-xl text-gray-700">current Username:</label>
+            <input type="text" class="outline-none text-gray-300 p-1 rounded-md" value="<%= username %>" name="username" />
+          </div>
+          <div class="flex flex-col m-2">
+            <label for="name" class="text-xl text-gray-700">new Username:</label>
+            <input type="text" class="outline-none p-1 rounded-md" required placeholder="enter new username" name="newusername" />
+          </div>
+          <div class="flex justify-center align-center p-2">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-gray-200 rounded-xl">Update</button>
+          </div>
+        </form>  
+      </div>
+    </div>
+  </body>
+</html>
