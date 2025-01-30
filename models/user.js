@@ -10,7 +10,7 @@ const userSchema=new mongoose.Schema({
     email:String,
     password:String,
     date:{type:Number,default:Date.now},
-    profileimage:String,
+    profilepic:{type:String,default:"guest.jfif"},
     posts:[{type:mongoose.Schema.Types.ObjectId,ref:"post",}]
 });
 

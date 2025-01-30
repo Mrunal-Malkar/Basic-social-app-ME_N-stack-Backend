@@ -12,6 +12,7 @@ import { verify } from "crypto";
 import { runInNewContext } from "vm";
 import postModel from "./models/post.js";
 import { userInfo } from "os";
+import multer from "multer";
 
 const app = express();
 
@@ -23,10 +24,30 @@ dotenv.config();
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
+app.use(express.static("uploads"))
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+
+
+const storage=multer.diskStorage({
+  destination:"./uploads",
+  filename:(req,file,cb)=>{
+    cb(null,file.fieldname+"-"+Date.now()+path.extname(file.originalname));
+  }
+})
+
+const upload=multer({storage:storage});
+
+app.post("/upload",authenticate,upload.single("profilepic"),async(req,res)=>{
+  if(!req.file){
+    return res.send("no file uploaded");
+  }
+  await userModel.findOneAndUpdate({email:req.user.email},{profilepic:req.file.filename})
+  console.log("file uploaded");
+  res.redirect("/home");
+})
 
 app.get("/sign-up", (req, res) => {
   res.render("sign-up");
@@ -127,11 +148,12 @@ app.get("/home", authenticate, async (req, res) => {
     } 
     let username = user.username;
     let email = user.email;
-
+    let profilepic=user.profilepic;
     let userWithPopulatedPost=await user.populate("posts");
     let userWithOnlyPopulatedPost=userWithPopulatedPost.posts.filter((post)=>(post.content)); 
     let allPostContent=userWithOnlyPopulatedPost.map((post)=>{return post.content});  
-    res.render("home", { username, email, allPostContent}); 
+    res.render("home", { username, email, allPostContent,profilepic}); 
+    console.log("this is your pic",profilepic);
   } catch (error) { 
     console.error("something went wrong at home page",error);
     res.status(500).send("Internal Server Error");
